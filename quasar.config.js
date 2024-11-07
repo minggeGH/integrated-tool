@@ -71,7 +71,7 @@ module.exports = configure(function (/* ctx */) {
       // minify: false,
       // polyfillModulePreload: true,
       useFilenameHashes: true,
-      distDir: "dist",
+      distDir: "docs",
 
       extendViteConf(viteConf) {
         viteConf.base = "./";
