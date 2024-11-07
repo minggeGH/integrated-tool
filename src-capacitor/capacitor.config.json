@@ -1,0 +1,9 @@
+{
+  "appId": "com.example.app",
+  "appName": "集成工具",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "url": "http://192.168.0.88:9500"
+  }
+}

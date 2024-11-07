@@ -1,0 +1,13 @@
+{
+  "name": "integrated-tool",
+  "version": "0.0.2",
+  "description": "A Quasar Project",
+  "author": "luxrg <136412296@qq.com>",
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "^5.7.8",
+    "@capacitor/app": "^5.0.0",
+    "@capacitor/cli": "^5.0.0",
+    "@capacitor/core": "^5.0.0"
+  }
+}

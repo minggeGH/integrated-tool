@@ -1,0 +1,15 @@
+{
+  "appId": "com.example.app",
+  "appName": "集成工具",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "android": {
+    "hideLogs": false,
+    "allowMixedContent": true,
+    "webContentsDebuggingEnabled": true
+  },
+  "server": {
+    "url": "http://192.168.0.88:9090",
+    "cleartext": true
+  }
+}
