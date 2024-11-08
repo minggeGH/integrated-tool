@@ -10,6 +10,13 @@ const routes = [
           pageTitle: "计算器"
         }
       },
+      {
+        path: "/system",
+        component: () => import("pages/systemPage.vue"),
+        meta: {
+          pageTitle: "系统"
+        }
+      }
     ]
   },
   // Always leave this as last one,
