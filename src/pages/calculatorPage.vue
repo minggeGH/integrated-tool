@@ -2,7 +2,7 @@
 <template>
   <q-layout>
     <Header title="计算器" :showBackButton="false" bgClass="bg-indigo-10 text-white text-center" />
-    <q-page-container class="h-screen">
+    <q-page-container class="h-full w-full">
       <q-page class="h-full w-full p-3" :class="{
         'bg-grey-2': !isDark,
         'bg-grey-10': isDark
