@@ -20,7 +20,8 @@
     "sync": "npx cap sync",
     "openAndroid": "npx cap open android",
     "open-android": "quasar dev -m capacitor -T android",
-    "capacitor-icons": "icongenie generate -m capacitor -i public/icons/favicon-96x96.png"
+    "capacitor-icons": "icongenie generate -m capacitor -i public/icons/favicon-96x96.png",
+    "spa-icon": "icongenie generate -m spa -i public/logo.png"
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
