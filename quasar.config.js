@@ -31,7 +31,6 @@ module.exports = configure(function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [],
-    cssAddon: true, // 确保可以使用 CSS 变量
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ["app.scss"],
 
@@ -51,7 +50,6 @@ module.exports = configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
-      sassVariables: 'src/css/quasar.variables.sass', // 引用自定义变量文件
       target: {
         browser: ["es2019", "edge88", "firefox78", "chrome87", "safari13.1"],
         node: "node20",
@@ -135,9 +133,8 @@ module.exports = configure(function (/* ctx */) {
         // directives: [],
 
         // Quasar plugins
-        plugins: ["Notify", "AppFullscreen", "BottomSheet", "Dialog", "Loading", "LocalStorage",
-          "SessionStorage"],
       },
+      plugins: ["Notify", "AppFullscreen", "BottomSheet", "Dialog", "Loading", "LocalStorage"],
 
       // animations: 'all', // --- includes all animations
       // https://v2.quasar.dev/options/animations

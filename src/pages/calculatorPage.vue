@@ -41,6 +41,7 @@ import * as Api from "@/api/api";
 import { useSettingStore } from "@/stores/modules/settingStore";
 
 const $q = useQuasar()
+console.log("🚀 ~ $q:", $q)
 // 计算字符串
 const countText = ref("")
 // 计算结果
@@ -92,7 +93,7 @@ function onSubmit() {
 
 function onClear() {
   $q.dialog({
-    title: 'Confirm',
+    title: '提示',
     message: '是否重置?',
     ok: "确认",
     cancel: "取消",
