@@ -87,6 +87,11 @@ function onSubmit() {
       countText: countText.value,
       countResult: countResult.value
     })
+    $q.notify({
+      message: '计算成功',
+      color: 'positive',
+      position: 'top',
+    })
   }
 
 }
