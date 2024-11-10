@@ -1,4 +1,4 @@
-src/layouts/MainLayout.vue<template>
+<template>
   <q-layout view="lHh lpR lFf">
     <q-page-container class="h-screen">
       <router-view v-slot="{ Component }">
@@ -10,18 +10,18 @@ src/layouts/MainLayout.vue<template>
     </q-page-container>
     <q-footer class="bg-primary text-white">
       <q-tabs v-model="nowView" dense class="bg-grey-2 text-grey-7" active-color="primary" @update="changeView">
-        <q-tab name="index" icon="home" label="首页" @click="router.push('/')" />
-        <q-tab name="system" icon="settings" label="系统" @click="router.push('/system')" />
+        <q-route-tab name="index" icon="home" label="首页" to="/" />
+        <q-route-tab name="system" icon="settings" label="系统" to="/system" />
       </q-tabs>
     </q-footer>
   </q-layout>
 </template>
 
 <script setup>
+import { Dark, LocalStorage } from "quasar";
 const route = useRoute();
-const router = useRouter();
-
 
 const nowView = ref("index");
+Dark.set(LocalStorage.getItem("themeDark") || false)
 
 </script>

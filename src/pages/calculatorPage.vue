@@ -1,16 +1,19 @@
 <!-- todo 计算器 -->
 <template>
   <q-layout>
-    <Header title="计算器" :showBackButton="false" bgClass="bg-secondary text-white text-center" />
+    <Header title="计算器" :showBackButton="false" bgClass="bg-indigo-10 text-white text-center" />
     <q-page-container class="h-screen">
-      <q-page class="h-full w-full p-3 bg-gray-300">
+      <q-page class="h-full w-full p-3" :class="{
+        'bg-grey-2': !isDark,
+        'bg-grey-10': isDark
+      }">
         <!-- ?编辑器 -->
         <q-card class="bg-white">
           <q-card-section class="p-0">
-            <q-input v-model="countText" @keyup.enter="onSubmit" debounce="100" bg-color="white" inputClass="text-xl"
-              filled type="textarea">
+            <q-input v-model="countText" @keyup.enter="onSubmit" debounce="100" :bg-color="!isDark ? 'white' : 'grey-9'"
+              inputClass="text-xl" filled type="textarea">
               <template v-slot:append>
-                <q-btn flat icon="style" @click="copyText(countText)"></q-btn>
+                <q-btn flat icon="style" color="blue-grey" @click="copyText(countText)"></q-btn>
               </template>
             </q-input>
           </q-card-section>
@@ -33,26 +36,58 @@
 
 <script setup>
 import Header from "@/components/Header/index.vue";
-import { useQuasar, LocalStorage } from "quasar";
+import { useQuasar, Dark, LocalStorage } from "quasar";
 import * as Api from "@/api/api";
+import { useSettingStore } from "@/stores/modules/settingStore";
+
 const $q = useQuasar()
 // 计算字符串
 const countText = ref("")
 // 计算结果
 const countResult = ref("")
 
+const isDark = computed(() => Dark.isActive)
+const { serverState } = useSettingStore()
+
+onMounted(() => {
+  console.log("🚀 ~ onMounted ~ serverState:", serverState)
+  if (serverState) {
+    Api.tool.getToolData().then(res => {
+      countText.value = res.countText
+      countResult.value = res.countResult
+    })
+  } else {
+    const toolData = LocalStorage.getItem("toolData")
+    if (toolData) {
+      countText.value = toolData.countText || ''
+      countResult.value = toolData.countResult || ''
+    }
+
+  }
+
+})
+
+
 function onSubmit() {
   countResult.value = eval(countText.value)
-  Api.tool.updataToolData({
-    countText: countText.value,
-    countResult: countResult.value
-  }).then(res => {
-    $q.notify({
-      message: '计算成功',
-      color: 'positive',
-      position: 'top',
+  if (serverState) {
+    Api.tool.updataToolData({
+      countText: countText.value,
+      countResult: countResult.value
+    }).then(res => {
+      $q.notify({
+        message: '计算成功',
+        color: 'positive',
+        position: 'top',
+      })
     })
-  })
+  } else {
+    LocalStorage.set("toolData", {
+      countText: countText.value,
+      countResult: countResult.value
+    })
+  }
+
 }
 
 function onClear() {
@@ -84,12 +119,5 @@ function copyText(text) {
     position: 'top',
   })
 }
-
-onMounted(() => {
-  Api.tool.getToolData().then(res => {
-    countText.value = res.countText
-    countResult.value = res.countResult
-  })
-})
 
 </script>

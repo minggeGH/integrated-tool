@@ -5,7 +5,7 @@ const routes = [
     children: [
       {
         path: "",
-        component: () => import("pages/calculator/index.vue"),
+        component: () => import("pages/calculatorPage.vue"),
         meta: {
           pageTitle: "计算器"
         }
@@ -14,7 +14,8 @@ const routes = [
         path: "/system",
         component: () => import("pages/systemPage.vue"),
         meta: {
-          pageTitle: "系统"
+          pageTitle: "系统",
+          keepAlive: true
         }
       }
     ]
