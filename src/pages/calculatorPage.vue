@@ -17,6 +17,9 @@
               </template>
             </q-input>
           </q-card-section>
+          <q-inner-loading :showing="visible">
+            <q-spinner-gears size="50px" color="primary" />
+          </q-inner-loading>
         </q-card>
         <!-- ?计算结果 -->
         <q-card @click="copyText(countResult)" class="mt-3">
@@ -50,6 +53,8 @@ const countResult = ref("")
 const isDark = computed(() => Dark.isActive)
 const { serverState } = useSettingStore()
 
+const visible = ref(false)
+
 onMounted(() => {
   console.log("🚀 ~ onMounted ~ serverState:", serverState)
   if (serverState) {
@@ -70,6 +75,7 @@ onMounted(() => {
 
 
 function onSubmit() {
+  visible.value = true
   countResult.value = eval(countText.value)
   if (serverState) {
     Api.tool.updataToolData({
@@ -81,17 +87,21 @@ function onSubmit() {
         color: 'positive',
         position: 'top',
       })
+      visible.value = false
     })
   } else {
     LocalStorage.set("toolData", {
       countText: countText.value,
       countResult: countResult.value
     })
-    $q.notify({
-      message: '计算成功',
-      color: 'positive',
-      position: 'top',
-    })
+    setTimeout(() => {
+      $q.notify({
+        message: '计算成功',
+        color: 'positive',
+        position: 'top',
+      })
+      visible.value = false
+    }, 1000);
   }
 
 }
@@ -112,7 +122,7 @@ function onClear() {
 
 // * 复制文本
 function copyText(text) {
-  // 复制文本  
+  // 复制文本
   var textarea = document.createElement('textarea');
   textarea.value = text
   document.body.appendChild(textarea);
