@@ -11,6 +11,8 @@
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
     "build": "node quasar build",
+    "build:android": "quasar build -m capacitor -T android --ide",
+    "build:android:release": "cd android && .\\gradlew.bat :app:assembleRelease",
     "build:lib": "quasar build",
     "vite:build": "vite build",
     "start": "node server/app.js",
