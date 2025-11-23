@@ -9,7 +9,7 @@
       </template>
     </Header>
     <q-page-container class="h-screen">
-    <q-page class="h-full w-full p-3 flex flex-col" style="min-height: 0;" :class="{
+      <q-page class="h-full w-full p-3 flex flex-col" style="min-height: 0;" :class="{
         'bg-dark': $q.dark.isActive,
         'bg-grey-7': !$q.dark.isActive
       }">
@@ -19,15 +19,9 @@
             <q-card-section class="p-4">
               <div class="text-xl font-medium p-2 rounded">
                 <div v-if="exprParts.length" class="row items-center wrap">
-                  <q-chip
-                    v-for="(p, idx) in exprParts"
-                    :key="'chip-'+idx"
-                    clickable
-                    :color="selectedIndex === idx ? 'primary' : 'grey-6'"
-                    text-color="white"
-                    class="q-mr-sm q-mb-sm"
-                    @click="selectPart(idx)"
-                  >
+                  <q-chip v-for="(p, idx) in exprParts" :key="'chip-' + idx" clickable
+                    :color="selectedIndex === idx ? 'primary' : 'grey-6'" text-color="white" class="q-mr-sm q-mb-sm"
+                    @click="selectPart(idx)">
                     <span v-if="idx === 0">{{ p.value }}</span>
                     <span v-else>{{ p.op }} {{ p.value }}</span>
                   </q-chip>
@@ -55,7 +49,7 @@
         </div>
 
         <!-- ?操作区域 - 操作类型和输入框融为一体 -->
-        <div class="w-full pb-5">
+        <div class="w-full">
           <q-card class="shadow-md mt-3">
             <q-card-section>
               <!-- 操作类型 -->
@@ -79,20 +73,11 @@
               <div class="mt-4">
                 <div class="text-sm mb-2">编辑所选表达式项：</div>
                 <div v-if="selectedIndex !== -1 && exprParts[selectedIndex]" class="row items-center q-my-sm">
-                  <q-select
-                    v-if="selectedIndex !== 0"
-                    dense outlined class="q-mr-sm"
-                    :options="['+','-']"
+                  <q-select v-if="selectedIndex !== 0" dense outlined class="q-mr-sm" :options="['+', '-']"
                     :model-value="exprParts[selectedIndex].op"
-                    @update:model-value="val => updatePartOp(selectedIndex, val)"
-                    style="width:70px"
-                  />
-                  <q-input
-                    dense outlined type="number"
-                    :model-value="exprParts[selectedIndex].value"
-                    @update:model-value="val => updatePartValue(selectedIndex, val)"
-                    class="q-mr-sm" style="flex:1"
-                  />
+                    @update:model-value="val => updatePartOp(selectedIndex, val)" style="width:70px" />
+                  <q-input dense outlined type="number" :model-value="exprParts[selectedIndex].value"
+                    @update:model-value="val => updatePartValue(selectedIndex, val)" class="q-mr-sm" style="flex:1" />
                   <q-btn dense flat color="negative" label="删除" @click="removePart(selectedIndex)" />
                 </div>
                 <div v-else class="text-italic text-grey">请在上方点击某一项进行编辑</div>
@@ -242,7 +227,7 @@ watch(exprParts, () => {
       exprParts: exprParts.value,
       timestamp: new Date().getTime()
     })
-  } catch (e) {}
+  } catch (e) { }
 }, { deep: true })
 
 onMounted(() => {
