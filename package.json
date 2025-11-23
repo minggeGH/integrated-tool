@@ -23,7 +23,13 @@
     "openAndroid": "npx cap open android",
     "open-android": "quasar dev -m capacitor -T android",
     "capacitor-icons": "icongenie generate -m capacitor -i public/icons/favicon-96x96.png",
-    "spa-icon": "icongenie generate -m spa -i public/logo.png"
+    "spa-icon": "icongenie generate -m spa -i public/logo.png",
+    "android:prepare": "npm run build:lib && npm run sync",
+    "android:debug": "npm run android:prepare && cd android && .\\gradlew.bat :app:assembleDebug",
+    "android:release": "npm run android:prepare && cd android && .\\gradlew.bat :app:assembleRelease",
+    "android:bundle": "npm run android:prepare && cd android && .\\gradlew.bat :app:bundleRelease",
+    "android:clean": "cd android && .\\gradlew.bat clean",
+    "android:signing-report": "cd android && .\\gradlew.bat signingReport"
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
