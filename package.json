@@ -10,7 +10,7 @@
     "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
-    "build": "node update-build-env.js && quasar build",
+    "build": "node quasar build",
     "build:lib": "quasar build",
     "vite:build": "vite build",
     "start": "node server/app.js",

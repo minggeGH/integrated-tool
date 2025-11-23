@@ -4,6 +4,9 @@
       <q-btn v-if="showBackButton" flat round dense class="icon-[material-symbols--chevron-left-rounded] text-sm"
         @click="router.back()" />
       <q-toolbar-title :class="{ 'absolute-center': isTextCenter }">{{ title }}</q-toolbar-title>
+      <div class="q-ml-auto">
+        <slot name="right"></slot>
+      </div>
     </q-toolbar>
   </q-header>
 </template>
