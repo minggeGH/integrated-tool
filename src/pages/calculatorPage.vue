@@ -66,6 +66,8 @@ import Header from "@/components/Header/index.vue";
 import { ref, onMounted, getCurrentInstance } from "vue";
 import { useQuasar, LocalStorage, Dark } from "quasar";
 import * as Api from "@/api/api";
+import { useSettingStore } from "@/stores/modules/settingStore";
+
 const $q = useQuasar()
 const app = getCurrentInstance()
 // 计算字符串
@@ -144,7 +146,7 @@ function onSubmit() {
 
 function onClear() {
   $q.dialog({
-    title: 'Confirm',
+    title: '提示',
     message: '是否重置?',
     ok: "确认",
     cancel: "取消",
@@ -160,7 +162,7 @@ function onClear() {
 
 // * 复制文本
 function copyText(text) {
-  // 复制文本  
+  // 复制文本
   var textarea = document.createElement('textarea');
   textarea.value = text
   document.body.appendChild(textarea);

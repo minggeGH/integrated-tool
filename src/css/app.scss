@@ -3,3 +3,32 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+.body--light {
+  /* ... */
+  // 定义亮色主题的变量
+  $primary: #1976D2;
+  $secondary: #26A69A;
+  $accent: #9C27B0;
+  $dark: #1d1d1d; // 亮色主题下的暗色背景
+  $positive: #21BA45;
+  $negative: #C10015;
+  $info: #31CCEC;
+  $warning: #F2C037;
+
+
+}
+
+.body--dark {
+  /* ... */
+  // 自定义暗色主题的变量
+  $primary: #BB86FC;
+  $secondary: #03DAC6;
+  $accent: #03A9F4;
+  $background: #121212;
+  $surface: #1E1E1E;
+  $positive: #00C853;
+  $negative: #D32F2F;
+  $info: #29B6F6;
+  $warning: #FFC107;
+}

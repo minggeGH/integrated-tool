@@ -5,11 +5,19 @@ const routes = [
     children: [
       {
         path: "",
-        component: () => import("pages/calculator/index.vue"),
+        component: () => import("pages/calculatorPage.vue"),
         meta: {
           pageTitle: "计算器"
         }
       },
+      {
+        path: "/system",
+        component: () => import("pages/systemPage.vue"),
+        meta: {
+          pageTitle: "系统",
+          keepAlive: true
+        }
+      }
     ]
   },
   // Always leave this as last one,
