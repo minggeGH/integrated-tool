@@ -1,13 +1,16 @@
 <!-- todo 计算器 -->
 <template>
   <q-layout>
-    <Header title="计算器" :showBackButton="false" bgClass="bg-secondary text-white text-center">
+    <Header title="计算器" :showBackButton="false" bgClass="text-white text-center">
       <template v-slot:right>
         <q-btn flat round dense icon="brightness_6" @click="toggleTheme" />
       </template>
     </Header>
     <q-page-container class="h-screen">
-      <q-page class="h-full w-full p-3 flex flex-col">
+      <q-page class="h-full w-full p-3 flex flex-col" :class="{
+        'bg-dark': $q.dark.isActive,
+        'bg-grey-7': !$q.dark.isActive
+      }">
         <div class="flex-1">
           <!-- ?预览方程式区域 -->
           <q-card>
@@ -63,13 +66,11 @@
 
 <script setup>
 import Header from "@/components/Header/index.vue";
-import { ref, onMounted, getCurrentInstance } from "vue";
+import { ref, onMounted } from "vue";
 import { useQuasar, LocalStorage, Dark } from "quasar";
 import * as Api from "@/api/api";
-import { useSettingStore } from "@/stores/modules/settingStore";
 
 const $q = useQuasar()
-const app = getCurrentInstance()
 // 计算字符串
 const countText = ref("")
 // 计算结果
@@ -78,6 +79,7 @@ const countResult = ref("")
 const inputValue = ref("")
 // 操作类型
 const operationType = ref("default")
+const currentTheme = ref("mytheme")
 
 // 新增值处理函数
 function onAddValue() {
@@ -178,38 +180,22 @@ function copyText(text) {
 
 // 切换主题功能
 function toggleTheme() {
-  const currentTheme = document.documentElement.dataset.theme
-  const newTheme = currentTheme === 'winter' ? 'mytheme' : 'winter'
-  app.appContext.config.globalProperties.$theme.setTheme(newTheme)
-  LocalStorage.set('app_theme', newTheme)
+  // 使用Quasar的Dark模式API，直接切换布尔值
+  Dark.set(!Dark.isActive)
+  // 更新当前主题状态
+  currentTheme.value = Dark.isActive ? 'dark' : 'light'
 }
 
 onMounted(() => {
+  // 设置默认暗色主题
+  Dark.set(true)
+  currentTheme.value = 'dark'
+
   // 首先尝试从本地缓存获取数据
   const cachedData = LocalStorage.getItem('calculator_data')
   if (cachedData) {
     countText.value = cachedData.countText
     countResult.value = cachedData.countResult
-  }
-
-  // 然后从API获取最新数据
-  Api.tool.getToolData().then(res => {
-    if (res.countText || res.countResult) {
-      countText.value = res.countText
-      countResult.value = res.countResult
-      // 更新本地缓存
-      LocalStorage.set('calculator_data', {
-        countText: res.countText,
-        countResult: res.countResult,
-        timestamp: new Date().getTime()
-      })
-    }
-  })
-
-  // 从本地缓存恢复主题设置
-  const savedTheme = LocalStorage.getItem('app_theme')
-  if (savedTheme) {
-    app.appContext.config.globalProperties.$theme.setTheme(savedTheme)
   }
 })
 

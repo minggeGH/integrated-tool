@@ -10,14 +10,14 @@ const routes = [
           pageTitle: "计算器"
         }
       },
-      {
-        path: "/system",
-        component: () => import("pages/systemPage.vue"),
-        meta: {
-          pageTitle: "系统",
-          keepAlive: true
-        }
-      }
+      // {
+      //   path: "/system",
+      //   component: () => import("pages/systemPage.vue"),
+      //   meta: {
+      //     pageTitle: "系统",
+      //     keepAlive: true
+      //   }
+      // }
     ]
   },
   // Always leave this as last one,

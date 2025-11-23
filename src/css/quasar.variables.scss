@@ -9,3 +9,25 @@ $info: #31CCEC;
 $warning: #F2C037;
 
 // 根据当前主题设置变量
+$primary: oklch(var(--p));
+$secondary: oklch(var(--s));
+$accent: oklch(var(--a));
+
+$dark: oklch(var(--b1));
+$dark-page: oklch(var(--b2));
+
+$positive: oklch(var(--su));
+$negative: oklch(var(--er));
+$info: oklch(var(--in));
+$warning: oklch(var(--wa));
+
+// 默认字体大小
+// $body-font-size: 16px;
+// $input-font-size: 16px;
+// $tooltip-fontsize: 14px;
+// .q-table tbody td {
+//   font-size: 14px;
+// }
+
+// 暗色皮肤的分割线颜色
+$separator-dark-color: rgba(255, 255, 255, 0.08) !default;
