@@ -9,11 +9,11 @@
       </template>
     </Header>
     <q-page-container class="h-screen">
-      <q-page class="h-full w-full p-3 flex flex-col" :class="{
+    <q-page class="h-full w-full p-3 flex flex-col" style="min-height: 0;" :class="{
         'bg-dark': $q.dark.isActive,
         'bg-grey-7': !$q.dark.isActive
       }">
-        <div class="flex-1">
+        <div class="flex-1" style="overflow-y: auto;">
           <!-- ?预览方程式区域 -->
           <q-card>
             <q-card-section class="p-4">
