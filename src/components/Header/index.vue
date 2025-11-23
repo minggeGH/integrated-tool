@@ -1,10 +1,15 @@
 <template>
   <q-header :class="dark ? 'bg-transparent' : bgClass + ' text-base-content'">
-    <q-toolbar>
+    <q-toolbar class="relative">
+      <!-- 左侧返回按钮 -->
       <q-btn v-if="showBackButton" flat round dense class="icon-[material-symbols--chevron-left-rounded] text-sm"
         @click="router.back()" />
-      <q-toolbar-title :class="{ 'absolute-center': isTextCenter }">{{ title }}</q-toolbar-title>
-      <div class="q-ml-auto">
+      <!-- 中间标题 -->
+      <q-toolbar-title class="absolute-center pr-0">
+        {{ title }}
+      </q-toolbar-title>
+      <!-- 右侧插槽 -->
+      <div class="absolute-right q-pr-sm">
         <slot name="right"></slot>
       </div>
     </q-toolbar>
