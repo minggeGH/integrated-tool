@@ -59,13 +59,16 @@
                   <q-radio v-model="operationType" val="default" label="默认值" />
                   <q-radio v-model="operationType" val="add" label="新增值" />
                   <q-radio v-model="operationType" val="subtract" label="减去值" />
+                  <q-radio v-model="operationType" val="multiply" label="乘以值" />
                 </div>
               </div>
 
               <!-- 输入区域 -->
-              <q-input v-model="inputValue" placeholder="请输入数值" type="number" filled class="w-full">
+              <q-input v-model="inputValue" placeholder="请输入数值" type="number" filled class="w-full" clearable>
                 <template v-slot:append>
-                  <q-btn color="primary" label="新增" @click="onAddValue" />
+                  <div class="px-2 pl-6">
+                    <q-btn color="primary" label="新增" @click="onAddValue" />
+                  </div>
                 </template>
               </q-input>
 
@@ -73,10 +76,10 @@
               <div class="mt-4">
                 <div class="text-sm mb-2">编辑所选表达式项：</div>
                 <div v-if="selectedIndex !== -1 && exprParts[selectedIndex]" class="row items-center q-my-sm">
-                  <q-select v-if="selectedIndex !== 0" dense outlined class="q-mr-sm" :options="['+', '-']"
+                  <q-select v-if="selectedIndex !== 0" dense outlined class="q-mr-sm" :options="['+', '-', '*']"
                     :model-value="exprParts[selectedIndex].op"
                     @update:model-value="val => updatePartOp(selectedIndex, val)" style="width:70px" />
-                  <q-input dense outlined type="number" :model-value="exprParts[selectedIndex].value"
+                  <q-input dense outlined type="number" :model-value="exprParts[selectedIndex].value" clearable
                     @update:model-value="val => updatePartValue(selectedIndex, val)" class="q-mr-sm" style="flex:1" />
                   <q-btn dense flat color="negative" label="删除" @click="removePart(selectedIndex)" />
                 </div>
@@ -110,7 +113,7 @@ const countText = computed(() => {
     .map((p, idx) => {
       const v = (p.value ?? "").toString()
       if (idx === 0) return v
-      return `${p.op === '-' ? '-' : '+'} ${v}`
+      return `${p.op === '-' ? '-' : (p.op === '*' ? '*' : '+')} ${v}`
     })
     .join(' ')
 })
@@ -124,7 +127,11 @@ const countResult = computed(() => {
     if (i === 0) {
       total = val
     } else {
-      total += part.op === '-' ? -val : val
+      if (part.op === '*') {
+        total *= val
+      } else {
+        total += part.op === '-' ? -val : val
+      }
     }
   }
   return total
@@ -137,7 +144,7 @@ function addPart(op, val) {
     exprParts.value.push({ op: '+', value: num })
     selectedIndex.value = 0
   } else {
-    exprParts.value.push({ op: op === '-' ? '-' : '+', value: num })
+    exprParts.value.push({ op: op === '-' ? '-' : (op === '*' ? '*' : '+'), value: num })
     selectedIndex.value = exprParts.value.length - 1
   }
 }
@@ -147,7 +154,7 @@ function onAddValue() {
     $q.notify({ message: '请输入数值', color: 'negative', position: 'top' })
     return
   }
-  const op = operationType.value === 'subtract' ? '-' : '+'
+  const op = operationType.value === 'subtract' ? '-' : (operationType.value === 'multiply' ? '*' : '+')
   if (operationType.value === 'default' && exprParts.value.length > 0) {
     $q.notify({ message: '已有默认值', color: 'warning', position: 'top' })
     return
@@ -158,7 +165,7 @@ function onAddValue() {
 
 function updatePartOp(index, op) {
   if (index === 0) return
-  exprParts.value[index].op = op === '-' ? '-' : '+'
+  exprParts.value[index].op = op === '-' ? '-' : (op === '*' ? '*' : '+')
 }
 
 function updatePartValue(index, val) {
@@ -210,10 +217,10 @@ function parseExpressionToParts(s) {
   const firstMatch = s.trim().match(/^\s*([+\-]?\d+(?:\.\d+)?)/)
   if (!firstMatch) return parts
   parts.push({ op: '+', value: parseFloat(firstMatch[1]) })
-  const re = /([+\-])\s*(\d+(?:\.\d+)?)/g
+  const re = /([+\-*×])\s*(\d+(?:\.\d+)?)/g
   let m
   while ((m = re.exec(s)) !== null) {
-    parts.push({ op: m[1] === '-' ? '-' : '+', value: parseFloat(m[2]) })
+    parts.push({ op: m[1] === '-' ? '-' : (m[1] === '*' || m[1] === '×' ? '*' : '+'), value: parseFloat(m[2]) })
   }
   return parts
 }

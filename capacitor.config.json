@@ -1,7 +1,7 @@
 {
   "appId": "com.luxrg.integratedtool",
   "appName": "集成工具",
-  "webDir": "docs",
+  "webDir": "dist",
   "bundledWebRuntime": false,
   "android": {
     "hideLogs": false,
