@@ -1,94 +1,137 @@
 <!-- todo 计算器 -->
 <template>
-  <q-layout>
-    <Header title="记账" :showBackButton="false" bgClass="text-white text-center">
-      <template v-slot:right>
-        <div class="row items-center h-full">
-          <q-btn flat round dense icon="brightness_6" @click="toggleTheme" />
-        </div>
-      </template>
-    </Header>
-    <q-page-container class="h-screen">
-      <q-page class="h-full w-full p-3 flex flex-col" style="min-height: 0;" :class="{
-        'bg-dark': $q.dark.isActive,
-        'bg-grey-7': !$q.dark.isActive
-      }">
-        <div class="flex-1" style="overflow-y: auto;">
-          <q-card>
-            <q-card-section class="p-4">
-              <div class="text-xl font-medium p-2 rounded">
-                <div class="q-mb-sm">余额：<span class="text-primary">{{ balanceDisplay }}</span></div>
-                <div class="q-mb-sm">减去值：</div>
-                <div class="row items-center wrap">
-                  <q-chip v-for="(v, idx) in subtractValues" :key="'sv-' + idx" clickable
-                    :color="selectedIndex === idx ? 'primary' : 'grey-6'" text-color="white" class="q-mr-sm q-mb-sm"
-                    @click="selectSubtract(idx)">
-                    - {{ v }}
-                  </q-chip>
-                  <div v-if="!subtractValues.length" class="text-grey">暂无</div>
+  <q-layout view="lHh Lpr lFf">
+    <!-- 顶部导航栏 -->
+    <q-header elevated class="bg-primary text-primary-content">
+      <q-toolbar>
+        <q-toolbar-title class="text-lg font-bold flex items-center gap-2">
+          <span class="icon-[material-symbols--calculate-rounded] text-2xl"></span>
+          记账助手
+        </q-toolbar-title>
+        <q-btn flat round dense :icon="isDark ? 'brightness_5' : 'brightness_6'" @click="toggleTheme"
+          class="transition-all duration-300">
+          <q-tooltip>{{ isDark ? '切换亮色主题' : '切换暗色主题' }}</q-tooltip>
+        </q-btn>
+      </q-toolbar>
+    </q-header>
+
+    <!-- 页面内容 -->
+    <q-page-container>
+      <q-page class="flex flex-col bg-base-200">
+        <div class="w-full max-w-4xl mx-auto p-4 space-y-4 flex-1" style="min-height: 0;">
+          <!-- 余额概览卡片 -->
+          <div class="card bg-base-100 shadow-xl">
+            <div class="card-body p-4">
+              <div class="flex items-center justify-between mb-3">
+                <h2 class="card-title text-base-content/70">
+                  <span class="icon-[material-symbols--account-balance-wallet] text-xl"></span>
+                  余额
+                </h2>
+                <div class="text-3xl font-bold text-primary">{{ balanceDisplay }}</div>
+              </div>
+
+              <!-- 减去值列表 -->
+              <div class="divider my-2">减去值</div>
+              <div class="flex flex-wrap gap-2 min-h-[40px]">
+                <div v-for="(v, idx) in subtractValues" :key="'sv-' + idx"
+                  class="badge badge-lg cursor-pointer transition-all duration-200 hover:scale-105"
+                  :class="selectedIndex === idx ? 'badge-primary' : 'badge-ghost'" @click="selectSubtract(idx)">
+                  - {{ v }}
                 </div>
-                <div class="q-mt-sm">日常开销：<span class="text-primary">{{ dailyValueADisplay }}</span> × <span
-                    class="text-primary">{{ dailyValueBDisplay }}</span> = <span class="text-primary">{{ dailyExpense
-                    }}</span></div>
-              </div>
-            </q-card-section>
-          </q-card>
-
-          <q-card class="mt-3">
-            <q-card-section>
-              <div class="row flex-wrap items-center justify-center">
-                计算结果：<span class="text-xl font-bold text-green-600">{{ countResult }}</span>
-              </div>
-              <div class="row space-x-2 mt-3 flex justify-center">
-                <q-btn outline color="red" label="重置" class="w-1/2 flex-1" @click="onClear" />
-                <q-btn outline color="green-6" label="复制" class="w-1/2 flex-1" @click="copyText(countText)" />
-              </div>
-            </q-card-section>
-          </q-card>
-        </div>
-
-        <div class="w-full">
-          <q-card class="shadow-md mt-3">
-            <q-card-section>
-              <div class="q-mb-md">
-                <div class="text-sm mb-2">余额：</div>
-                <q-input v-model="balance" placeholder="请输入余额" type="number" filled class="w-full" clearable />
-              </div>
-
-              <div class="q-mb-md">
-                <div class="text-sm mb-2">减去值：</div>
-                <q-input v-model="subtractInput" placeholder="请输入减去值" type="number" filled class="w-full" clearable>
-                  <template v-slot:append>
-                    <div class="px-2 pl-6">
-                      <q-btn color="primary" label="新增" @click="onAddSubtract" />
-                    </div>
-                  </template>
-                </q-input>
-                <div class="mt-4">
-                  <div class="text-sm mb-2">编辑所选项：</div>
-                  <div v-if="selectedIndex !== -1 && subtractValues[selectedIndex] !== undefined"
-                    class="row items-center q-my-sm">
-                    <q-input dense outlined type="number" :model-value="subtractValues[selectedIndex]" clearable
-                      @update:model-value="val => updateSubtractValue(selectedIndex, val)" class="q-mr-sm"
-                      style="flex:1" />
-                    <q-btn dense flat color="negative" label="删除" @click="removeSubtract(selectedIndex)" />
-                  </div>
-                  <div v-else class="text-italic text-grey">请在上方点击某一项进行编辑</div>
+                <div v-if="!subtractValues.length" class="text-base-content/40 text-sm italic">
+                  暂无减去值
                 </div>
               </div>
+              <div v-if="subtractValues.length" class="mt-2 text-sm text-base-content/60">
+                合计：<span class="font-semibold text-secondary">{{ sumSubtract }}</span>
+              </div>
 
-              <div>
-                <div class="text-sm mb-2">日常开销：</div>
-                <div class="row items-center">
-                  <q-input v-model="dailyValueA" clearable dense outlined type="number" class="q-mr-sm" style="flex:1"
-                    placeholder="请输入单价或次数" />
-                  <div class="q-mx-sm">×</div>
-                  <q-input v-model="dailyValueB" clearable dense outlined type="number" style="flex:1"
-                    placeholder="请输入数量或单价" />
+              <!-- 日常开销 -->
+              <div class="divider my-2">日常开销</div>
+              <div class="flex items-center justify-between bg-base-200 rounded-lg p-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-lg font-semibold text-accent">{{ dailyValueADisplay }}</span>
+                  <span class="text-base-content/50">×</span>
+                  <span class="text-lg font-semibold text-accent">{{ dailyValueBDisplay }}</span>
+                </div>
+                <div class="text-xl font-bold text-accent">= {{ dailyExpense }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 计算结果卡片 -->
+          <div class="card bg-gradient-to-br from-primary to-secondary text-primary-content shadow-xl">
+            <div class="card-body p-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-sm opacity-80">计算结果</div>
+                  <div class="text-4xl font-bold mt-1">{{ countResult }}</div>
+                </div>
+                <span class="icon-[material-symbols--savings-rounded] text-6xl opacity-20"></span>
+              </div>
+              <div class="card-actions justify-end mt-3">
+                <q-btn outline color="white" label="重置" class="flex-1" @click="onClear" />
+                <q-btn outline color="white" label="复制" class="flex-1" @click="copyText(countText)" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 输入表单卡片 -->
+          <div class="card bg-base-100 shadow-xl">
+            <div class="card-body p-4">
+              <h3 class="card-title text-base">
+                <span class="icon-[material-symbols--edit-rounded] text-xl"></span>
+                编辑数据
+              </h3>
+
+              <!-- 余额输入 -->
+              <div class="form-control w-full">
+                <label class="label">
+                  <span class="label-text font-medium">余额</span>
+                </label>
+                <q-input v-model="balance" placeholder="请输入余额" type="number" outlined dense
+                  class="bg-base-200 rounded-lg" clearable />
+              </div>
+
+              <!-- 减去值输入 -->
+              <div class="form-control w-full mt-4">
+                <label class="label">
+                  <span class="label-text font-medium">减去值</span>
+                </label>
+                <div class="flex gap-2">
+                  <q-input v-model="subtractInput" placeholder="请输入减去值" type="number" outlined dense
+                    class="bg-base-200 rounded-lg flex-1" clearable @keyup.enter="onAddSubtract" />
+                  <q-btn color="primary" label="新增" @click="onAddSubtract" class="h-10" />
                 </div>
               </div>
-            </q-card-section>
-          </q-card>
+
+              <!-- 编辑选中项 -->
+              <div v-if="selectedIndex !== -1 && subtractValues[selectedIndex] !== undefined"
+                class="mt-4 p-3 bg-base-200 rounded-lg">
+                <div class="text-sm font-medium mb-2">编辑第 {{ selectedIndex + 1 }} 项</div>
+                <div class="flex gap-2">
+                  <q-input dense outlined type="number" :model-value="subtractValues[selectedIndex]" clearable
+                    @update:model-value="val => updateSubtractValue(selectedIndex, val)"
+                    class="bg-base-100 rounded-lg flex-1" />
+                  <q-btn flat color="negative" label="删除" @click="removeSubtract(selectedIndex)" />
+                </div>
+              </div>
+
+              <!-- 日常开销输入 -->
+              <div class="form-control w-full mt-4">
+                <label class="label">
+                  <span class="label-text font-medium">日常开销</span>
+                </label>
+                <div class="flex items-center gap-2">
+                  <q-input v-model="dailyValueA" clearable dense outlined type="number"
+                    class="bg-base-200 rounded-lg flex-1" placeholder="单价/次数" />
+                  <span class="text-base-content/50 text-lg">×</span>
+                  <q-input v-model="dailyValueB" clearable dense outlined type="number"
+                    class="bg-base-200 rounded-lg flex-1" placeholder="数量/单价" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </q-page>
     </q-page-container>
@@ -96,13 +139,14 @@
 </template>
 
 <script setup>
-import Header from "@/components/Header/index.vue";
 import { ref, onMounted, computed, watch } from "vue";
 import { useQuasar, LocalStorage, Dark } from "quasar";
 import * as Api from "@/api/api";
+import { initTheme, toggleTheme as switchTheme, getCurrentTheme, isDark as checkIsDark } from "@/utils/theme";
 
 const $q = useQuasar()
-const currentTheme = ref("mytheme")
+const currentTheme = ref('dark')
+const isDark = computed(() => currentTheme.value === "dark")
 
 const balance = ref("")
 const subtractValues = ref([])
@@ -154,12 +198,12 @@ const countText = computed(() => {
 
 function onAddSubtract() {
   if (!subtractInput.value) {
-    $q.notify({ message: '请输入减去值', color: 'negative', position: 'top' })
+    $q.notify({ message: '请输入减去值', color: 'negative', position: 'top', icon: 'warning' })
     return
   }
   const num = Number(subtractInput.value)
   if (!Number.isFinite(num)) {
-    $q.notify({ message: '请输入有效数字', color: 'negative', position: 'top' })
+    $q.notify({ message: '请输入有效数字', color: 'negative', position: 'top', icon: 'warning' })
     return
   }
   subtractValues.value.push(num)
@@ -197,6 +241,7 @@ function onClear() {
       dailyValueB.value = ''
       selectedIndex.value = -1
       LocalStorage.remove('accounting_data')
+      $q.notify({ message: '已重置', color: 'positive', position: 'top', icon: 'check' })
     })
 }
 
@@ -207,12 +252,12 @@ function copyText(text) {
   textarea.select()
   document.execCommand('copy')
   document.body.removeChild(textarea)
-  $q.notify({ message: '复制成功', color: 'positive', position: 'top' })
+  $q.notify({ message: '复制成功', color: 'positive', position: 'top', icon: 'check' })
 }
 
 function toggleTheme() {
-  Dark.set(!Dark.isActive)
-  currentTheme.value = Dark.isActive ? 'dark' : 'light'
+  const newTheme = switchTheme()
+  currentTheme.value = newTheme
 }
 
 watch([balance, subtractValues, dailyValueA, dailyValueB], () => {
@@ -231,8 +276,11 @@ watch([balance, subtractValues, dailyValueA, dailyValueB], () => {
 }, { deep: true })
 
 onMounted(() => {
-  Dark.set(true)
-  currentTheme.value = 'dark'
+  // 初始化主题
+  const savedTheme = initTheme()
+  currentTheme.value = savedTheme
+
+  // 加载保存的数据
   const cached = LocalStorage.getItem('accounting_data')
   if (cached) {
     balance.value = cached.balance ?? ''
@@ -248,3 +296,41 @@ function selectSubtract(idx) {
 }
 
 </script>
+
+<style scoped>
+/* 主题过渡动画 */
+.q-layout {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* 输入框样式优化 */
+:deep(.q-field__control) {
+  border-radius: 0.5rem;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.5);
+}
+</style>
