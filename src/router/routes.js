@@ -5,19 +5,31 @@ const routes = [
     children: [
       {
         path: "",
-        component: () => import("pages/calculatorPage.vue"),
+        name: "accounting",
+        component: () => import("pages/accountingPage.vue"),
         meta: {
-          pageTitle: "计算器"
+          pageTitle: "记账",
+          keepAlive: true
         }
       },
-      // {
-      //   path: "/system",
-      //   component: () => import("pages/systemPage.vue"),
-      //   meta: {
-      //     pageTitle: "系统",
-      //     keepAlive: true
-      //   }
-      // }
+      {
+        path: "/statistics",
+        name: "statistics",
+        component: () => import("pages/statisticsPage.vue"),
+        meta: {
+          pageTitle: "统计",
+          keepAlive: true
+        }
+      },
+      {
+        path: "/settings",
+        name: "settings",
+        component: () => import("pages/settingsPage.vue"),
+        meta: {
+          pageTitle: "设置",
+          keepAlive: false
+        }
+      }
     ]
   },
   // Always leave this as last one,

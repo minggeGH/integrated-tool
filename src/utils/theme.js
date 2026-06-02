@@ -1,4 +1,5 @@
 import { LocalStorage, Dark } from "quasar"
+import { ref } from "vue"
 
 /**
  * 主题管理工具
@@ -10,6 +11,9 @@ const THEMES = {
   LIGHT: 'light',
   DARK: 'dark'
 }
+
+// 全局响应式主题状态
+const currentTheme = ref('dark')
 
 /**
  * 初始化主题
@@ -38,6 +42,9 @@ export function applyTheme(theme) {
   
   // 保存到本地存储
   LocalStorage.set('theme', theme)
+  
+  // 更新全局响应式状态
+  currentTheme.value = theme
 }
 
 /**
@@ -45,8 +52,8 @@ export function applyTheme(theme) {
  * @returns {string} 新主题名称
  */
 export function toggleTheme() {
-  const currentTheme = document.documentElement.getAttribute('data-theme') || THEMES.DARK
-  const newTheme = currentTheme === THEMES.DARK ? THEMES.LIGHT : THEMES.DARK
+  const current = document.documentElement.getAttribute('data-theme') || THEMES.DARK
+  const newTheme = current === THEMES.DARK ? THEMES.LIGHT : THEMES.DARK
   applyTheme(newTheme)
   return newTheme
 }
@@ -67,11 +74,20 @@ export function isDark() {
   return getCurrentTheme() === THEMES.DARK
 }
 
+/**
+ * 获取全局响应式主题状态
+ * @returns {Ref} 响应式主题引用
+ */
+export function useTheme() {
+  return currentTheme
+}
+
 export default {
   THEMES,
   initTheme,
   applyTheme,
   toggleTheme,
   getCurrentTheme,
-  isDark
+  isDark,
+  useTheme
 }

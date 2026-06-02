@@ -1,7 +1,7 @@
 {
   "name": "integrated-tool",
   "private": false,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A Quasar Project",
   "productName": "集成工具",
   "author": "luxrg <136412296@qq.com>",
