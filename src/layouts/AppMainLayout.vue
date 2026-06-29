@@ -5,14 +5,14 @@
     <q-header class="bg-transparent text-base-content" bordered>
       <q-toolbar class="mx-auto flex w-full max-w-6xl px-4 pt-3">
         <div class="w-full rounded-[28px] border border-base-300 bg-base-100 px-4 py-3 shadow-xl backdrop-blur sm:px-5">
-          <div class="flex items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-              <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-base-200 text-primary">
+          <div class="flex items-start justify-between gap-3 sm:gap-4">
+            <div class="flex min-w-0 flex-1 items-center gap-3">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-base-200 text-primary">
                 <q-icon name="account_balance_wallet" size="24px" />
               </div>
-              <div>
-                <div class="text-lg font-bold leading-tight sm:text-xl">{{ pageTitle }}</div>
-                <div class="text-sm text-base-content opacity-70">{{ pageSubtitle }}</div>
+              <div class="min-w-0 flex-1">
+                <div class="truncate text-lg font-bold leading-tight sm:text-xl">{{ pageTitle }}</div>
+                <div class="truncate text-sm text-base-content opacity-70">{{ pageSubtitle }}</div>
               </div>
             </div>
 
@@ -20,6 +20,7 @@
               flat
               round
               color="primary"
+              class="shrink-0 self-start"
               :icon="isDark ? 'light_mode' : 'dark_mode'"
               @click="toggleAppTheme()"
             >
