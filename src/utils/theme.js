@@ -1,4 +1,4 @@
-import { LocalStorage, Dark } from "quasar"
+import { Dark, LocalStorage } from "quasar";
 import { ref } from "vue"
 
 /**

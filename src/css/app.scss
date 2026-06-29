@@ -65,3 +65,37 @@ body {
   $info: #29B6F6;
   $warning: #FFC107;
 }
+
+html,
+body,
+#q-app {
+  min-height: 100%;
+}
+
+body {
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.app-page {
+  @apply min-h-full px-4 pb-28 pt-5;
+}
+
+.app-page__inner {
+  @apply mx-auto flex w-full max-w-6xl flex-col gap-4;
+}
+
+.app-surface {
+  @apply rounded-[28px] border border-base-300 bg-base-100 shadow-xl backdrop-blur;
+}
+
+.app-surface-soft {
+  @apply rounded-3xl border border-base-300 bg-base-100 shadow-lg backdrop-blur;
+}
+
+.app-section-title {
+  @apply flex items-center gap-3 text-lg font-semibold;
+}
+
+.app-kpi {
+  @apply rounded-3xl border px-4 py-4 shadow-lg;
+}
