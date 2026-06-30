@@ -20,17 +20,11 @@
           </div>
           <div class="mt-4 grid gap-3">
             <div class="app-surface-soft p-4">
-              <div class="text-sm text-base-content opacity-70">剩余天数</div>
-              <div class="mt-2 text-3xl font-bold text-info">{{ remainingDays }}</div>
-            </div>
-            <div class="app-surface-soft p-4">
-              <div class="flex items-center justify-between text-sm text-base-content opacity-70">
-                <span>每日伙食费</span>
+              <div class="text-sm text-base-content opacity-70 row justify-between">
+                <span>剩余天数</span>
                 <span>{{ dailyFoodDisplay }}/天</span>
               </div>
-              <div class="mt-3 h-2 rounded-full bg-base-300">
-                <div class="h-2 rounded-full bg-info" :style="{ width: `${foodProgress}%` }"></div>
-              </div>
+              <div class="mt-2 text-3xl font-bold text-info">{{ remainingDays }}</div>
             </div>
             <q-btn unelevated color="primary" label="重置本月数据" @click="onClear" />
           </div>
@@ -128,12 +122,6 @@ const $q = useQuasar();
 const currentTheme = useAppTheme();
 
 const isDark = computed(() => currentTheme.value === "dark");
-const heroMetricClass = computed(() =>
-  isDark.value ? "border-white/10 bg-black/20 text-white" : "border-white/35 bg-white/90 text-slate-800"
-);
-const heroMetricLabelClass = computed(() =>
-  isDark.value ? "text-white/65" : "text-slate-500"
-);
 
 const balance = ref("");
 const subtractItems = ref([]);
@@ -172,8 +160,8 @@ const remainingDays = computed(() => {
 
 const sumSubtract = computed(() => subtractItems.value.reduce((sum, item) => sum + (Number(item.value) || 0), 0));
 const dailyFoodDisplay = computed(() => Number(dailyFoodCost.value) || 0);
-const totalFoodExpense = computed(() => dailyFoodDisplay.value * remainingDays.value);
-const balanceDisplay = computed(() => Number(balance.value) || 0);
+const totalFoodExpense = computed(() => dailyFoodDisplay.value * remainingDays.value); // 本月伙食费
+const balanceDisplay = computed(() => Number(balance.value) || 0); // 余额
 const countResult = computed(() => balanceDisplay.value - sumSubtract.value - totalFoodExpense.value);
 const summaryText = computed(
   () => `余额 ${balanceDisplay.value}，扣除 ${sumSubtract.value}，伙食 ${totalFoodExpense.value}`
@@ -181,10 +169,6 @@ const summaryText = computed(
 const countText = computed(() => {
   const items = subtractItems.value.map((item) => `${item.tag}:${item.value}`).join("，");
   return `余额 ${balanceDisplay.value} - 扣除项(${items || "无"}) - 伙食费(${dailyFoodDisplay.value}×${remainingDays.value}=${totalFoodExpense.value})`;
-});
-const foodProgress = computed(() => {
-  if (!balanceDisplay.value) return 0;
-  return Math.min(100, Math.round((totalFoodExpense.value / balanceDisplay.value) * 100));
 });
 
 function getTagColor(tag) {
