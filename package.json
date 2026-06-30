@@ -12,6 +12,7 @@
     "dev": "quasar dev",
     "start": "node server/app.js",
     "nodemon": "nodemon server/app.js",
+    "build": "quasar build && npx cap sync android && cd android && .\\gradlew.bat assembleRelease",
     "android:icons": "node scripts/update-android-icons.js",
     "android:sync": "quasar build && npx cap sync android",
     "android:build:debug": "quasar build && npx cap sync android && cd android && .\\gradlew.bat assembleDebug",
