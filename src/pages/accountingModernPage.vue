@@ -3,28 +3,13 @@
     <div class="app-page__inner">
       <section class="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
         <div class="rounded-[32px] bg-gradient-to-br from-primary to-info p-4 text-white shadow-2xl sm:p-5">
-          <div class="flex items-start justify-between gap-3">
+          <div class="flex items-start justify-between gap-3 pl-3">
             <div>
               <div class="text-sm opacity-80">本月可用余额</div>
               <div class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">{{ countResult }}</div>
               <div class="mt-2 text-sm opacity-80">{{ summaryText }}</div>
             </div>
             <q-btn flat round color="white" icon="content_copy" size="md" @click="copyText(countText)" />
-          </div>
-
-          <div class="mt-4 grid gap-2 sm:grid-cols-3">
-            <div class="rounded-2xl border px-3 py-3 shadow-lg backdrop-blur" :class="heroMetricClass">
-              <div class="text-[11px] uppercase tracking-[0.18em]" :class="heroMetricLabelClass">余额</div>
-              <div class="mt-1 text-lg font-semibold sm:text-xl">{{ balanceDisplay }}</div>
-            </div>
-            <div class="rounded-2xl border px-3 py-3 shadow-lg backdrop-blur" :class="heroMetricClass">
-              <div class="text-[11px] uppercase tracking-[0.18em]" :class="heroMetricLabelClass">扣除合计</div>
-              <div class="mt-1 text-lg font-semibold sm:text-xl">{{ sumSubtract }}</div>
-            </div>
-            <div class="rounded-2xl border px-3 py-3 shadow-lg backdrop-blur" :class="heroMetricClass">
-              <div class="text-[11px] uppercase tracking-[0.18em]" :class="heroMetricLabelClass">伙食总计</div>
-              <div class="mt-1 text-lg font-semibold sm:text-xl">{{ totalFoodExpense }}</div>
-            </div>
           </div>
         </div>
 
@@ -63,35 +48,17 @@
           </div>
 
           <div class="mt-4 flex flex-wrap gap-2">
-            <button
-              v-for="(item, idx) in subtractItems"
-              :key="`${item.tag}-${idx}`"
+            <button v-for="(item, idx) in subtractItems" :key="`${item.tag}-${idx}`"
               class="rounded-2xl border border-base-300 bg-base-200 px-3 py-2 text-left hover:-translate-y-0.5 hover:border-primary hover:bg-base-100"
-              @click="openEditDialog(idx)"
-            >
+              @click="openEditDialog(idx)">
               <div class="flex items-center gap-2">
                 <q-badge :color="getTagColor(item.tag)" rounded>{{ item.tag }}</q-badge>
                 <span class="font-semibold">-{{ item.value }}</span>
               </div>
             </button>
-            <div
-              v-if="!subtractItems.length"
-              class="w-full rounded-3xl border border-dashed border-base-300 px-4 py-8 text-center text-sm text-base-content opacity-60"
-            >
+            <div v-if="!subtractItems.length"
+              class="w-full rounded-3xl border border-dashed border-base-300 px-4 py-8 text-center text-sm text-base-content opacity-60">
               暂无扣除项，先从右侧表单添加一条
-            </div>
-          </div>
-
-          <div v-if="subtractItems.length" class="mt-4 grid gap-3 sm:grid-cols-2">
-            <div class="app-surface-soft p-4">
-              <div class="text-sm text-base-content opacity-70">最近一次添加</div>
-              <div class="mt-2 text-lg font-semibold">
-                {{ subtractItems[subtractItems.length - 1].tag }} / {{ subtractItems[subtractItems.length - 1].value }}
-              </div>
-            </div>
-            <div class="app-surface-soft p-4">
-              <div class="text-sm text-base-content opacity-70">扣除项总额</div>
-              <div class="mt-2 text-lg font-semibold text-secondary">{{ sumSubtract }}</div>
             </div>
           </div>
         </div>
@@ -113,18 +80,10 @@
             <div>
               <div class="mb-2 text-sm font-medium text-base-content opacity-80">常用标签</div>
               <div class="flex flex-wrap gap-2">
-                <q-btn
-                  v-for="tag in presetTags"
-                  :key="tag"
-                  unelevated
-                  no-caps
-                  size="sm"
+                <q-btn v-for="tag in presetTags" :key="tag" unelevated no-caps size="sm"
                   :color="selectedTag === tag ? 'primary' : isDark ? 'grey-8' : 'grey-3'"
-                  :text-color="selectedTag === tag ? 'white' : isDark ? 'white' : 'dark'"
-                  :label="tag"
-                  class="rounded-full"
-                  @click="selectedTag = tag"
-                />
+                  :text-color="selectedTag === tag ? 'white' : isDark ? 'white' : 'dark'" :label="tag"
+                  class="rounded-full" @click="selectedTag = tag" />
               </div>
             </div>
 
